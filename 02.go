@@ -2,13 +2,12 @@ package main
 
 import (
 	. "aoc/util"
-	"os"
 	"fmt"
+	"os"
 )
 
 func main() {
 	lines := Input(os.Args[1], "\n", true)
-	Pf("len %d\n", len(lines))
 	part1 := 0
 	part2 := 0
 	for _, intvl := range Spac(lines[0], ",", -1) {
@@ -18,7 +17,6 @@ func main() {
 				part1 += n
 			}
 			if !isvalid2(fmt.Sprintf("%d", n)) {
-				Pln(n, "is invalid")
 				part2 += n
 			}
 		}
@@ -33,8 +31,10 @@ func isvalid(x string) bool {
 
 func isvalid2(x string) bool {
 	for sz := 1; sz <= len(x)/2; sz++ {
+		if len(x)%sz != 0 {
+			continue
+		}
 		if !isvalid2intl(x, sz) {
-			Pln(x, "is invalid at size", sz)
 			return false
 		}
 	}
