@@ -22,30 +22,31 @@ func main() {
 	for i := range M {
 		for j := range M[i] {
 			if M[i][j] == 'S' {
-				s = position{ i, j }
+				s = position{i, j}
 				break
 			}
 		}
 	}
-	
-	ps := make(Set[position])
-	ps.Add(s)
-	
+
+	ps := map[position]int{}
+	ps[s] = 1
+
 	part1 := 0
-	part2 := 1
+	part2 := 0
 	for len(ps) > 0 {
-		psnext := make(Set[position])
-		for p := range ps {
+		psnext := map[position]int{}
+		for p, cnt := range ps {
 			p.i++
 			if p.i >= len(M) {
+				part2 += cnt
 				continue
 			}
 			if M[p.i][p.j] == '^' {
 				part1++
-				psnext.Add(position{ p.i, p.j-1 })
-				psnext.Add(position{ p.i, p.j+1 })
+				psnext[position{p.i, p.j - 1}] += cnt
+				psnext[position{p.i, p.j + 1}] += cnt
 			} else {
-				psnext.Add(p)
+				psnext[p] += cnt
 			}
 		}
 		ps = psnext
