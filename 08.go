@@ -5,6 +5,8 @@ import (
 	"os"
 	"math"
 	_ "sort"
+	"slices"
+	"cmp"
 )
 
 type point struct {
@@ -16,6 +18,11 @@ var dist = map[int]map[int]float64{}
 var color []int
 var nextcolor = 1
 
+type adist struct {
+	d float64
+	i, j int
+}
+
 func main() {
 	lines := Input(os.Args[1], "\n", true)
 	Pf("len %d\n", len(lines))
@@ -24,6 +31,8 @@ func main() {
 		v := Vatoi(Spac(line, ",", -1))
 		points = append(points, point{ float64(v[0]), float64(v[1]), float64(v[2]) })
 	}
+	
+	distv := []adist{}
 	
 	for i := range points {
 		for j := i+1; j < len(points); j++ {
@@ -36,8 +45,14 @@ func main() {
 			}
 			dist[i][j] = d
 			dist[j][i] = d
+			
+			distv = append(distv, adist{ d, i, j })
 		}
 	}
+	
+	slices.SortFunc(distv, func(a, b adist) int {
+		return cmp.Compare(a.d, b.d)
+	})
 	
 	Pln("distances done")
 	
@@ -51,8 +66,10 @@ func main() {
 		N = 1000
 	}*/
 	
-	for cnt := 0; true; cnt++ {
-		i, j := findmin(prevmin)
+	for cnt, ad := range distv {
+		//i, j := findmin(prevmin)
+		_ = prevmin
+		i, j := ad.i, ad.j
 		Pln("Joining", points[i], points[j], cnt)
 		prevmin = dist[i][j]
 		if i == 0 && j == 0 {
@@ -88,7 +105,7 @@ func main() {
 		}
 		if allsame {
 			Pln("first connection is", points[i], points[j])
-			Sol(points[i].x * points[j].x)
+			Sol(int(points[i].x * points[j].x))
 			break
 		}
 	}
