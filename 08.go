@@ -4,7 +4,7 @@ import (
 	. "aoc/util"
 	"os"
 	"math"
-	"sort"
+	_ "sort"
 )
 
 type point struct {
@@ -45,13 +45,13 @@ func main() {
 	
 	prevmin := 0.0
 	
-	N := 10
+	/*N := 10
 	if len(lines) > 500 {
 		Pln("big input")
 		N = 1000
-	}
+	}*/
 	
-	for cnt := range N {
+	for cnt := 0; true; cnt++ {
 		i, j := findmin(prevmin)
 		Pln("Joining", points[i], points[j], cnt)
 		prevmin = dist[i][j]
@@ -78,7 +78,21 @@ func main() {
 		color[i] = c
 		color[j] = c
 		
+		allsame := true
+		c2 := color[0]
+		for i := range color {
+			if color[i] != c2 {
+				allsame = false
+				break
+			}
+		}
+		if allsame {
+			Pln("first connection is", points[i], points[j])
+			Sol(points[i].x * points[j].x)
+			break
+		}
 	}
+	/*
 	Pln(color)
 	counts := map[int]int{}
 	for i := range color {
@@ -94,7 +108,7 @@ func main() {
 	Pln(counts)
 	sort.Ints(countsv)
 	Pln(countsv)
-	Sol(countsv[len(countsv)-1] * countsv[len(countsv)-2] * countsv[len(countsv)-3])
+	Sol(countsv[len(countsv)-1] * countsv[len(countsv)-2] * countsv[len(countsv)-3])*/
 }
 
 func findmin(prevmin float64) (int, int) {
